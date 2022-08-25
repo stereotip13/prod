@@ -1,4 +1,4 @@
-import { Row } from 'antd';
+import { Card, Row } from 'antd';
 import Layout, { Content } from 'antd/lib/layout/layout';
 import React, { FC } from 'react';
 import LoginForm from '../components/LoginForm';
@@ -14,7 +14,9 @@ const Login: FC = () => {
           className="site-layout-background"
           style={{ padding: 40, minHeight: 280 }}
         >
-          <LoginForm />
+          <Card>
+            <LoginForm />
+          </Card>
         </Row>
       </Content>
     </Layout>

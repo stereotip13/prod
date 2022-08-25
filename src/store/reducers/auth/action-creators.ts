@@ -8,6 +8,7 @@ import {
   SetErrorAction,
 } from './types';
 import axios from 'axios';
+import UserService from '../../../api/UserService';
 
 export const AuthActionCreator = {
   setUser: (user: IUser): SetUserAction => ({
@@ -31,15 +32,15 @@ export const AuthActionCreator = {
       try {
         dispatch(AuthActionCreator.setIsLoading(true));
         setTimeout(async () => {
-          const response = await axios.get<IUser[]>('./user.json');
+          const response = await UserService.getUsers(); //axios.get<IUser[]>('./user.json');
           const mocUsers = response.data.find(
             (user) => user.username === username && user.password === password
           );
           if (mocUsers) {
             localStorage.setItem('auth', 'true');
             localStorage.setItem('username', mocUsers.username);
-            dispatch(AuthActionCreator.setIsAuth(true));
             dispatch(AuthActionCreator.setUser(mocUsers));
+            dispatch(AuthActionCreator.setIsAuth(true));
           } else {
             dispatch(
               AuthActionCreator.setError(
@@ -48,13 +49,15 @@ export const AuthActionCreator = {
             );
           }
           dispatch(AuthActionCreator.setIsLoading(false));
-        }, 2000);
+        }, 1000);
       } catch (e) {
         dispatch(AuthActionCreator.setError('Произошла ошибка при логине'));
       }
     },
   logout: () => async (dispatch: AppDispatch) => {
-    try {
-    } catch (e) {}
+    localStorage.removeItem('auth');
+    localStorage.removeItem('username');
+    dispatch(AuthActionCreator.setUser({} as IUser));
+    dispatch(AuthActionCreator.setIsAuth(false));
   },
 };

@@ -3,18 +3,26 @@ import { Layout, Row, Menu } from 'antd';
 import { useTapedSelector } from '../hooks/useTypedSelector';
 import { useNavigate } from 'react-router-dom';
 import { RouteNames } from '../router';
+//import { useDispatch } from 'react-redux';
+//import { AuthActionCreator } from '../store/reducers/auth/action-creators';
+import { useActions } from '../hooks/useActions';
 
 const Navbar: FC = () => {
   const navigate = useNavigate();
-  const { isAuth } = useTapedSelector((state) => state.auth);
+  const { isAuth, user } = useTapedSelector((state) => state.auth);
+  //const dispatch = useDispatch();
+  const { logout } = useActions();
   return (
     <Layout.Header>
       <Row justify="end">
         {isAuth ? (
           <>
-            <div style={{ color: 'white' }}>Sasha</div>
+            <div style={{ color: 'white' }}>{user.username}</div>
             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-              <Menu.Item key={1} onClick={() => console.log('Выйти')}>
+              <Menu.Item
+                key={1}
+                onClick={logout} //() => {dispatch(AuthActionCreator.logout()}
+              >
                 Выйти
               </Menu.Item>
             </Menu>

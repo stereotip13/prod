@@ -1,9 +1,9 @@
 import { DatePicker, Form, Input, Row, Button, Select } from 'antd';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { IUser } from '../models/IUser';
 import { IEvent } from '../models/IEvent';
 import { rules } from '../utils/rules';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { formatDate } from '../utils/date';
 import { useTapedSelector } from '../hooks/useTypedSelector';
 
@@ -45,9 +45,25 @@ const EventForm: FC<EventFormProps> = (props) => {
         name="date"
         rules={[
           rules.required(),
-          rules.isDateAfter('Нельзя создавать событие в прошлом'),
+          {
+            type: 'object',
+            validator: async (_, value) => {
+              if (value && value.isBefore(moment())) {
+                throw new Error('Нельзя создавать событие в прошлом');
+              }
+            },
+          },
         ]}
       >
+        {/* </Form.Item>
+      <Form.Item
+        label="Дата события"
+        name="date"
+        rules={[
+          rules.required(),
+          rules.isDateAfter('Нельзя создавать событие в прошлом'),
+        ]}
+      > */}
         <DatePicker onChange={(date) => selectDate(date)} />
       </Form.Item>
       <Form.Item label="Пользователь" name="guests" rules={[rules.required()]}>

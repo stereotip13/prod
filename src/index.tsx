@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
 
 ReactDOM.render(
+  //Провайдер связывает реакт с редаксом
   <Provider store={store}>
     <BrowserRouter>
       <App />
